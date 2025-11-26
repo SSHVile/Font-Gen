@@ -1,114 +1,110 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Vile's Font Studio</title>
-  <link rel="shortcut icon" href="assets/logo.ico" type="image/x-icon">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Vile's Font Studio</title>
+<link rel="shortcut icon" href="assets/logo.ico" type="image/x-icon">
 
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
 
-    body {
-      margin: 0;
-      padding: 20px;
-      background: #000;
-      font-family: 'Poppins', sans-serif;
-      color: #fff;
-    }
+body {
+  margin: 0;
+  padding: 20px;
+  background: #000;
+  font-family: 'Poppins', sans-serif;
+  color: #fff;
+}
 
-    h1 {
-      font-size: 28px;
-      color: #ff69b4;
-      text-align: center;
-      text-shadow: 0 0 8px #ff69b4, 0 0 16px #ff69b4;
-      margin-bottom: 30px;
-    }
+h1 {
+  font-size: 28px;
+  color: #ff69b4;
+  text-align: center;
+  text-shadow: 0 0 8px #ff69b4, 0 0 16px #ff69b4;
+  margin-bottom: 30px;
+}
 
-    .box {
-      background: linear-gradient(145deg,#111727,#0f101f);
-      padding: 20px;
-      border-radius: 16px;
-      margin-bottom: 25px;
-      box-shadow: 0 0 20px rgba(255,105,180,0.3), 0 0 40px rgba(148,0,255,0.2);
-      border: 1px solid rgba(255,105,180,0.2);
-    }
+.box {
+  background: linear-gradient(145deg,#111727,#0f101f);
+  padding: 20px;
+  border-radius: 16px;
+  margin-bottom: 25px;
+  box-shadow: 0 0 20px rgba(255,105,180,0.3), 0 0 40px rgba(148,0,255,0.2);
+  border: 1px solid rgba(255,105,180,0.2);
+}
 
-    textarea {
-      width: 100%;
-      height: 150px;
-      background: #0d1321;
-      color: #fff;
-      border: 1px solid #222;
-      padding: 12px;
-      border-radius: 12px;
-      box-shadow: 0 0 10px rgba(255,105,180,0.2) inset;
-      font-size: 16px;
-      resize: vertical;
-    }
+textarea {
+  width: 100%;
+  height: 150px;
+  background: #0d1321;
+  color: #fff;
+  border: 1px solid #222;
+  padding: 12px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(255,105,180,0.2) inset;
+  font-size: 16px;
+  resize: vertical;
+}
 
-    input[type="range"] {
-      width: 220px;
-      accent-color: #ff69b4;
-      margin: 10px 0;
-    }
+input[type="range"] {
+  width: 220px;
+  accent-color: #ff69b4;
+  margin: 10px 0;
+}
 
-    button {
-      background: linear-gradient(45deg,#ff69b4,#9400ff);
-      color: #fff;
-      border: none;
-      padding: 10px 18px;
-      border-radius: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      margin-top: 10px;
-      margin-right: 8px;
-      box-shadow: 0 0 16px #ff69b4, 0 0 32px #9400ff;
-      transition: 0.2s all;
-    }
+button, select {
+  background: linear-gradient(45deg,#ff69b4,#9400ff);
+  color: #fff;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 10px;
+  margin-right: 8px;
+  box-shadow: 0 0 16px #ff69b4, 0 0 32px #9400ff;
+  transition: 0.2s all;
+}
 
-    button:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 24px #ff69b4, 0 0 48px #9400ff;
-    }
+button:hover, select:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 24px #ff69b4, 0 0 48px #9400ff;
+}
 
-    #previewBox {
-      margin-top: 20px;
-      padding: 24px;
-      background: #0d1321;
-      border-radius: 18px;
-      min-height: 200px;
-      white-space: pre-wrap;
-      color: #fff;
-      font-size: 24px;
-      font-weight: 600;
-      text-align: left;
-      border: 2px solid #ff69b4;
-      box-shadow: 0 0 20px #ff69b4, 0 0 40px #9400ff inset;
-      overflow-wrap: break-word;
-    }
+#previewBox {
+  margin-top: 20px;
+  padding: 24px;
+  background: #0d1321;
+  border-radius: 18px;
+  min-height: 200px;
+  white-space: pre-wrap;
+  color: #fff;
+  font-size: 24px;
+  font-weight: 600;
+  text-align: left;
+  border: 2px solid #ff69b4;
+  box-shadow: 0 0 20px #ff69b4, 0 0 40px #9400ff inset;
+  overflow-wrap: break-word;
+}
 
-    .controls {
-      margin: 10px 0;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
+.controls {
+  margin: 10px 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
 
-    .controls input[type="color"], .controls input[type="range"] {
-      cursor: pointer;
-      box-shadow: 0 0 12px #ff69b4;
-    }
+.controls input[type="color"], .controls input[type="range"] {
+  cursor: pointer;
+  box-shadow: 0 0 12px #ff69b4;
+}
 
-    label {
-      font-weight: 500;
-    }
-
-    .format-btns button {
-      margin-right: 5px;
-    }
-  </style>
+label {
+  font-weight: 500;
+}
+</style>
 </head>
 <body>
 
@@ -135,17 +131,21 @@
   <label>Paragraph Spacing: <span id="paraLabel">0px</span></label><br>
   <input id="paraRange" type="range" min="0" max="50" value="0">
   <br>
-  <div class="format-btns">
-    <button id="boldBtn"><b>B</b></button>
-    <button id="italicBtn"><i>I</i></button>
-    <button id="underlineBtn"><u>U</u></button>
-    <button id="strikeBtn"><s>S</s></button>
-    <label>Highlight: <input type="color" id="highlightColor" value="#000000"></label>
-    <button id="leftAlign">Left</button>
-    <button id="centerAlign">Center</button>
-    <button id="rightAlign">Right</button>
-    <button id="justifyAlign">Justify</button>
-  </div>
+  <label>Formatting:</label>
+  <select id="formatDropdown">
+    <option value="">--Select--</option>
+    <option value="bold">Bold</option>
+    <option value="italic">Italic</option>
+    <option value="underline">Underline</option>
+    <option value="strike">Strikethrough</option>
+    <option value="highlight">Highlight</option>
+    <option value="left">Align Left</option>
+    <option value="center">Align Center</option>
+    <option value="right">Align Right</option>
+    <option value="justify">Justify</option>
+  </select>
+  <input type="color" id="highlightColor" value="#000000" style="margin-left:5px;">
+  <br>
   <button id="applyBtn">Apply</button>
   <button id="exportPDF">Export PDF</button>
 </div>
@@ -163,82 +163,88 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <script>
-  const fontInput = document.getElementById('fontFile');
-  const textInput = document.getElementById('textInput');
-  const preview = document.getElementById('previewBox');
-  const applyBtn = document.getElementById('applyBtn');
-  const sizeRange = document.getElementById('sizeRange');
-  const sizeLabel = document.getElementById('sizeLabel');
-  const lineRange = document.getElementById('lineRange');
-  const lineLabel = document.getElementById('lineLabel');
-  const letterRange = document.getElementById('letterRange');
-  const letterLabel = document.getElementById('letterLabel');
-  const paraRange = document.getElementById('paraRange');
-  const paraLabel = document.getElementById('paraLabel');
-  const exportPDF = document.getElementById('exportPDF');
-  const cp = document.getElementById('colorPicker');
-  const boldBtn = document.getElementById('boldBtn');
-  const italicBtn = document.getElementById('italicBtn');
-  const underlineBtn = document.getElementById('underlineBtn');
-  const strikeBtn = document.getElementById('strikeBtn');
-  const highlightColor = document.getElementById('highlightColor');
-  const leftAlign = document.getElementById('leftAlign');
-  const centerAlign = document.getElementById('centerAlign');
-  const rightAlign = document.getElementById('rightAlign');
-  const justifyAlign = document.getElementById('justifyAlign');
+const fontInput = document.getElementById('fontFile');
+const textInput = document.getElementById('textInput');
+const preview = document.getElementById('previewBox');
+const applyBtn = document.getElementById('applyBtn');
+const sizeRange = document.getElementById('sizeRange');
+const sizeLabel = document.getElementById('sizeLabel');
+const lineRange = document.getElementById('lineRange');
+const lineLabel = document.getElementById('lineLabel');
+const letterRange = document.getElementById('letterRange');
+const letterLabel = document.getElementById('letterLabel');
+const paraRange = document.getElementById('paraRange');
+const paraLabel = document.getElementById('paraLabel');
+const exportPDF = document.getElementById('exportPDF');
+const cp = document.getElementById('colorPicker');
+const formatDropdown = document.getElementById('formatDropdown');
+const highlightColor = document.getElementById('highlightColor');
 
-  let loadedFont = null;
+let loadedFont = null;
 
-  async function loadFont(file){
-    const buf = await file.arrayBuffer();
-    const blob = new Blob([buf]);
-    const url = URL.createObjectURL(blob);
-    const face = new FontFace("UserFont", `url(${url})`);
-    await face.load();
-    document.fonts.add(face);
-    loadedFont = "UserFont";
+async function loadFont(file){
+  const buf = await file.arrayBuffer();
+  const blob = new Blob([buf]);
+  const url = URL.createObjectURL(blob);
+  const face = new FontFace("UserFont", `url(${url})`);
+  await face.load();
+  document.fonts.add(face);
+  loadedFont = "UserFont";
+}
+
+// Update style sliders
+sizeRange.oninput = ()=>{ sizeLabel.textContent = sizeRange.value + 'px'; preview.style.fontSize = sizeRange.value + 'px'; }
+lineRange.oninput = ()=>{ lineLabel.textContent = lineRange.value; preview.style.lineHeight = lineRange.value; }
+letterRange.oninput = ()=>{ letterLabel.textContent = letterRange.value + 'px'; preview.style.letterSpacing = letterRange.value + 'px'; }
+paraRange.oninput = ()=>{ paraLabel.textContent = paraRange.value + 'px'; preview.style.marginBottom = paraRange.value + 'px'; }
+
+formatDropdown.onchange = ()=>{
+  const selection = window.getSelection();
+  if(!selection.rangeCount) return;
+  const range = selection.getRangeAt(0);
+  let span = document.createElement('span');
+  span.appendChild(range.extractContents());
+  const val = formatDropdown.value;
+  switch(val){
+    case "bold": span.style.fontWeight = "bold"; break;
+    case "italic": span.style.fontStyle = "italic"; break;
+    case "underline": span.style.textDecoration = "underline"; break;
+    case "strike": span.style.textDecoration = "line-through"; break;
+    case "highlight": span.style.backgroundColor = highlightColor.value; break;
+    case "left": preview.style.textAlign = "left"; return;
+    case "center": preview.style.textAlign = "center"; return;
+    case "right": preview.style.textAlign = "right"; return;
+    case "justify": preview.style.textAlign = "justify"; return;
+    default: return;
   }
+  range.insertNode(span);
+  formatDropdown.value = "";
+}
 
-  sizeRange.oninput = ()=>{ sizeLabel.textContent = sizeRange.value + 'px'; preview.style.fontSize = sizeRange.value + 'px'; }
-  lineRange.oninput = ()=>{ lineLabel.textContent = lineRange.value; preview.style.lineHeight = lineRange.value; }
-  letterRange.oninput = ()=>{ letterLabel.textContent = letterRange.value + 'px'; preview.style.letterSpacing = letterRange.value + 'px'; }
-  paraRange.oninput = ()=>{ paraLabel.textContent = paraRange.value + 'px'; preview.style.marginBottom = paraRange.value + 'px'; }
+applyBtn.onclick = async ()=>{
+  const file = fontInput.files[0];
+  if(file){ await loadFont(file); }
+  preview.style.fontFamily = loadedFont ? 'UserFont' : 'inherit';
+  preview.style.fontSize = sizeRange.value + 'px';
+  preview.style.lineHeight = lineRange.value;
+  preview.style.letterSpacing = letterRange.value + 'px';
+  preview.style.marginBottom = paraRange.value + 'px';
+  preview.style.color = cp.value;
+  preview.innerHTML = textInput.value.replace(/\n/g, '<br>') || '(Nothing yet)';
+}
 
-  boldBtn.onclick = () => document.execCommand('bold');
-  italicBtn.onclick = () => document.execCommand('italic');
-  underlineBtn.onclick = () => document.execCommand('underline');
-  strikeBtn.onclick = () => document.execCommand('strikeThrough');
-  highlightColor.oninput = () => document.execCommand('backColor', false, highlightColor.value);
+cp.addEventListener('input', e => { preview.style.color = e.target.value; });
 
-  leftAlign.onclick = () => document.execCommand('justifyLeft');
-  centerAlign.onclick = () => document.execCommand('justifyCenter');
-  rightAlign.onclick = () => document.execCommand('justifyRight');
-  justifyAlign.onclick = () => document.execCommand('justifyFull');
-
-  applyBtn.onclick = async ()=>{
-    const file = fontInput.files[0];
-    if(file){ await loadFont(file); }
-    preview.style.fontFamily = loadedFont ? 'UserFont' : 'inherit';
-    preview.style.fontSize = sizeRange.value + 'px';
-    preview.style.lineHeight = lineRange.value;
-    preview.style.letterSpacing = letterRange.value + 'px';
-    preview.style.marginBottom = paraRange.value + 'px';
-    preview.style.color = cp.value;
-    preview.innerHTML = textInput.value.replace(/\n/g, '<br>') || '(Nothing yet)';
-  }
-
-  cp.addEventListener('input', e => { preview.style.color = e.target.value; });
-
-  exportPDF.onclick = async ()=>{
-    const canvas = await html2canvas(preview, {scale:2, backgroundColor: '#000'});
-    const imgData = canvas.toDataURL('image/png');
-    const pdf = new jspdf.jsPDF({unit:'px', format:'a4'});
-    let pageWidth = pdf.internal.pageSize.getWidth();
-    let ratio = canvas.width / canvas.height;
-    let pdfHeight = pageWidth / ratio;
-    pdf.addImage(imgData, 'PNG', 0, 0, pageWidth, pdfHeight);
-    pdf.save('NeonText.pdf');
-  }
+exportPDF.onclick = async ()=>{
+  const canvas = await html2canvas(preview, {scale:2, backgroundColor: '#000'});
+  const imgData = canvas.toDataURL('image/png');
+  const pdf = new jspdf.jsPDF({unit:'px', format:'a4'});
+  let pageWidth = pdf.internal.pageSize.getWidth();
+  let ratio = canvas.width / canvas.height;
+  let pdfHeight = pageWidth / ratio;
+  pdf.addImage(imgData, 'PNG', 0, 0, pageWidth, pdfHeight);
+  pdf.save('NeonText.pdf');
+}
 </script>
 
 </body>
