@@ -48,9 +48,9 @@ textarea {
 }
 
 input[type="range"] {
-  width: 220px;
+  width: 150px;
   accent-color: #ff69b4;
-  margin: 10px 0;
+  margin: 0 10px 0 5px;
 }
 
 button, select {
@@ -63,14 +63,14 @@ button {
   background: linear-gradient(45deg,#ff69b4,#9400ff);
   color: #fff;
   border: none;
-  padding: 10px 14px;
+  padding: 8px 14px;
   border-radius: 14px;
   margin-top: 10px;
   margin-right: 8px;
   box-shadow: 0 0 16px #ff69b4, 0 0 32px #9400ff;
 }
 
-button:hover {
+button:hover, select:hover {
   transform: scale(1.05);
   box-shadow: 0 0 24px #ff69b4, 0 0 48px #9400ff;
 }
@@ -108,23 +108,25 @@ label {
   font-weight: 500;
 }
 
-#formatDropdown {
-  background: linear-gradient(45deg, #fff, #ff69b4);
-  color: black;
+#formatDropdown, #applyFormatBtn {
+  background: linear-gradient(45deg,#ff69b4,#9400ff);
+  color: #fff;
   border-radius: 12px;
   padding: 8px 12px;
   border: none;
   box-shadow: 0 0 16px #ff69b4, 0 0 32px #9400ff;
 }
+
 #applyFormatBtn {
   display: none;
-  background: linear-gradient(45deg,#ff69b4,#9400ff);
-  color: #fff;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 12px;
   margin-left: 5px;
-  box-shadow: 0 0 16px #ff69b4, 0 0 32px #9400ff;
+}
+
+.slider-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 </style>
 </head>
@@ -141,22 +143,22 @@ label {
   <label>Text</label><br><br>
   <textarea id="textInput" placeholder="Type your paragraphs here..."></textarea>
   <br>
-  <label>Font Size: <span id="sizeLabel">24px</span></label><br>
-  <input id="sizeRange" type="range" min="10" max="120" value="24">
-  <br>
-  <label>Line Height: <span id="lineLabel">1.2</span></label><br>
-  <input id="lineRange" type="range" min="1" max="3" step="0.1" value="1.2">
-  <br>
-  <label>Letter Spacing: <span id="letterLabel">0px</span></label><br>
-  <input id="letterRange" type="range" min="0" max="20" value="0">
-  <br>
-  <label>Paragraph Spacing: <span id="paraLabel">0px</span></label><br>
-  <input id="paraRange" type="range" min="0" max="50" value="0">
+  <div class="slider-row">
+    <label>Font Size: <span id="sizeLabel">24px</span></label>
+    <input id="sizeRange" type="range" min="10" max="120" value="24">
+    <label>Line Height: <span id="lineLabel">1.2</span></label>
+    <input id="lineRange" type="range" min="1" max="3" step="0.1" value="1.2">
+    <label>Letter Spacing: <span id="letterLabel">0px</span></label>
+    <input id="letterRange" type="range" min="0" max="20" value="0">
+    <label>Paragraph Spacing: <span id="paraLabel">0px</span></label>
+    <input id="paraRange" type="range" min="0" max="50" value="0">
+  </div>
   <br>
   <label>Formatting:</label>
   <select id="formatDropdown">
     <option value="">--Select--</option>
     <option value="bold">Bold</option>
+    <option value="unbold">Unbold</option>
     <option value="italic">Italic</option>
     <option value="underline">Underline</option>
     <option value="strike">Strikethrough</option>
@@ -166,7 +168,7 @@ label {
     <option value="right">Align Right</option>
     <option value="justify">Justify</option>
   </select>
-  <input type="color" id="highlightColor" value="#000000" style="margin-left:5px;">
+  <input type="color" id="highlightColor" value="#000000">
   <button id="applyFormatBtn">Apply</button>
   <br>
   <button id="applyBtn">Apply All Text</button>
@@ -244,6 +246,7 @@ applyFormatBtn.onclick = ()=>{
   span.appendChild(range.extractContents());
   switch(selectedFormat){
     case "bold": span.style.fontWeight="bold"; break;
+    case "unbold": span.style.fontWeight="normal"; break;
     case "italic": span.style.fontStyle="italic"; break;
     case "underline": span.style.textDecoration="underline"; break;
     case "strike": span.style.textDecoration="line-through"; break;
