@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Font Generator — Size Control + PDF Export</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      background: #000; /* Black background */
+      color: #fff;
+      font-family: 'Poppins', sans-serif;
+    }
+    h1 {
+      font-size: 24px;
+      margin-bottom: 14px;
+      color: #ff69b4; /* Pink heading */
+      text-shadow: 0 0 8px #ff69b4, 0 0 16px #ff69b4;
+    }
+    .box {
+      background: #111726;
+      padding: 16px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 16px rgba(255,105,180,0.4);
+    }
+    textarea {
+      width: 100%;
+      height: 200px;
+      background: #0d1321;
+      color: #fff;
+      border: 1px solid #222;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(255,105,180,0.2) inset;
+    }
+    button {
+      background: #ff69b4;
+      color: #fff;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 10px;
+      margin-right: 6px;
+      box-shadow: 0 0 12px #ff69b4, 0 0 24px #ff69b4;
+      transition: 0.2s all;
+    }
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px #ff69b4, 0 0 40px #ff69b4;
+    }
+    #previewBox {
+      margin-top: 20px;
+      padding: 20px;
+      background: #0d1321;
+      border-radius: 16px;
+      min-height: 200px;
+      white-space: pre-wrap;
+      color: #ff69b4; /* default text color pink */
+      box-shadow: 0 0 12px #ff69b4, 0 0 24px #ff69b4 inset;
+      animation: neonGlow 2s infinite alternate;
+    }
+    @keyframes neonGlow {
+      0% { box-shadow: 0 0 12px #ff69b4, 0 0 24px #ff69b4 inset; }
+      100% { box-shadow: 0 0 20px #ff69b4, 0 0 40px #ff69b4 inset; }
+    }
+    .controls {
+      margin: 10px 0;
+    }
+    input[type="range"] { width: 200px; }
+  </style>
+</head>
+<body>
+
+<h1>Font Generator (Size Control + PDF Export)</h1>
+
+<div class="box">
+  <label>Select font (.ttf / .otf)</label><br><br>
+  <input id="fontFile" type="file" accept=".ttf,.otf" />
+</div>
+
+<div class="box">
+  <label>Text</label><br><br>
+  <textarea id="textInput" placeholder="Type here..."></textarea>
+  <br>
+  <label>Font Size: <span id="sizeLabel">24px</span></label><br>
+  <input id="sizeRange" type="range" min="10" max="120" value="24">
+  <br>
+  <button id="applyBtn">Apply</button>
+  <button id="exportPDF">Export PDF</button>
+</div>
+
+<div class="box">
+  <label>Preview</label>
+  <div id="previewBox" style="font-size:24px">(Nothing yet)</div>
+</div>
+
+<div class="controls">
+  <label>Text Color: <input type="color" id="colorPicker" value="#ff69b4"></label>
+</div>
+
+<!-- html2canvas + jsPDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script>
+  const fontInput = document.getElementById('fontFile');
+  const textInput = document.getElementById('textInput');
+  const preview = document.getElementById('previewBox');
+  const applyBtn = document.getElementById('applyBtn');
+  const sizeRange = document.getElementById('sizeRange');
+  const sizeLabel = document.getElementById('sizeLabel');
+  const exportPDF = document.getElementById('exportPDF');
+  const cp = document.getElementById('colorPicker');
+
+  let loadedFont = null;
+
+  async function loadFont(file){
+    const buf = await file.arrayBuffer();
+    const blob = new Blob([buf]);
+    const url = URL.createObjectURL(blob);
+
+    const face = new FontFace("UserFont", `url(${url})`);
+    await face.load();
+    document.fonts.add(face);
+    loadedFont = "UserFont";
+  }
+
+  sizeRange.oninput = ()=>{
+    sizeLabel.textContent = sizeRange.value + 'px';
+    preview.style.fontSize = sizeRange.value + 'px';
+  }
+
+  applyBtn.onclick = async ()=>{
+    const file = fontInput.files[0];
+    if(file){ await loadFont(file); }
+
+    const txt = textInput.value;
+    preview.style.fontFamily = loadedFont ? 'UserFont' : 'inherit';
+    preview.style.fontSize = sizeRange.value + 'px';
+    preview.textContent = txt || '(Nothing yet)';
+  }
+
+  cp.addEventListener('input', e => { preview.style.color = e.target.value; });
+
+  exportPDF.onclick = async ()=>{
+    const canvas = await html2canvas(preview, {scale:2, backgroundColor: null});
+    const imgData = canvas.toDataURL('image/png');
+
+    const pdf = new jspdf.jsPDF({unit:'px', format:'a4'});
+
+    let pageWidth = pdf.internal.pageSize.getWidth();
+    let ratio = canvas.width / canvas.height;
+    let pdfHeight = pageWidth / ratio;
+
+    pdf.addImage(imgData, 'PNG', 0, 0, pageWidth, pdfHeight);
+    pdf.save('text.pdf');
+  }
+</script>
+
+</body>
+</html>
