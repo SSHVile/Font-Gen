@@ -36,7 +36,7 @@
 
     textarea {
       width: 100%;
-      height: 200px;
+      height: 150px;
       background: #0d1321;
       color: #fff;
       border: 1px solid #222;
@@ -79,10 +79,10 @@
       border-radius: 18px;
       min-height: 200px;
       white-space: pre-wrap;
-      color: #fff; /* default white text */
+      color: #fff;
       font-size: 24px;
       font-weight: 600;
-      text-align: left; /* left aligned */
+      text-align: left;
       border: 2px solid #ff69b4;
       box-shadow: 0 0 20px #ff69b4, 0 0 40px #9400ff inset;
       overflow-wrap: break-word;
@@ -93,13 +93,10 @@
       display: flex;
       align-items: center;
       gap: 12px;
+      flex-wrap: wrap;
     }
 
-    .controls input[type="color"] {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      border: 2px solid #ff69b4;
+    .controls input[type="color"], .controls input[type="range"] {
       cursor: pointer;
       box-shadow: 0 0 12px #ff69b4;
     }
@@ -129,9 +126,25 @@
   <label>Font Size: <span id="sizeLabel">24px</span></label><br>
   <input id="sizeRange" type="range" min="10" max="120" value="24">
   <br>
+  <label>Line Height: <span id="lineLabel">1.2</span></label><br>
+  <input id="lineRange" type="range" min="1" max="3" step="0.1" value="1.2">
+  <br>
+  <label>Letter Spacing: <span id="letterLabel">0px</span></label><br>
+  <input id="letterRange" type="range" min="0" max="20" value="0">
+  <br>
+  <label>Paragraph Spacing: <span id="paraLabel">0px</span></label><br>
+  <input id="paraRange" type="range" min="0" max="50" value="0">
+  <br>
   <div class="format-btns">
     <button id="boldBtn"><b>B</b></button>
     <button id="italicBtn"><i>I</i></button>
+    <button id="underlineBtn"><u>U</u></button>
+    <button id="strikeBtn"><s>S</s></button>
+    <label>Highlight: <input type="color" id="highlightColor" value="#000000"></label>
+    <button id="leftAlign">Left</button>
+    <button id="centerAlign">Center</button>
+    <button id="rightAlign">Right</button>
+    <button id="justifyAlign">Justify</button>
   </div>
   <button id="applyBtn">Apply</button>
   <button id="exportPDF">Export PDF</button>
@@ -146,7 +159,6 @@
   <label>Text Color: <input type="color" id="colorPicker" value="#ffffff"></label>
 </div>
 
-<!-- html2canvas + jsPDF -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
@@ -157,10 +169,23 @@
   const applyBtn = document.getElementById('applyBtn');
   const sizeRange = document.getElementById('sizeRange');
   const sizeLabel = document.getElementById('sizeLabel');
+  const lineRange = document.getElementById('lineRange');
+  const lineLabel = document.getElementById('lineLabel');
+  const letterRange = document.getElementById('letterRange');
+  const letterLabel = document.getElementById('letterLabel');
+  const paraRange = document.getElementById('paraRange');
+  const paraLabel = document.getElementById('paraLabel');
   const exportPDF = document.getElementById('exportPDF');
   const cp = document.getElementById('colorPicker');
   const boldBtn = document.getElementById('boldBtn');
   const italicBtn = document.getElementById('italicBtn');
+  const underlineBtn = document.getElementById('underlineBtn');
+  const strikeBtn = document.getElementById('strikeBtn');
+  const highlightColor = document.getElementById('highlightColor');
+  const leftAlign = document.getElementById('leftAlign');
+  const centerAlign = document.getElementById('centerAlign');
+  const rightAlign = document.getElementById('rightAlign');
+  const justifyAlign = document.getElementById('justifyAlign');
 
   let loadedFont = null;
 
@@ -174,19 +199,30 @@
     loadedFont = "UserFont";
   }
 
-  sizeRange.oninput = ()=>{
-    sizeLabel.textContent = sizeRange.value + 'px';
-    preview.style.fontSize = sizeRange.value + 'px';
-  }
+  sizeRange.oninput = ()=>{ sizeLabel.textContent = sizeRange.value + 'px'; preview.style.fontSize = sizeRange.value + 'px'; }
+  lineRange.oninput = ()=>{ lineLabel.textContent = lineRange.value; preview.style.lineHeight = lineRange.value; }
+  letterRange.oninput = ()=>{ letterLabel.textContent = letterRange.value + 'px'; preview.style.letterSpacing = letterRange.value + 'px'; }
+  paraRange.oninput = ()=>{ paraLabel.textContent = paraRange.value + 'px'; preview.style.marginBottom = paraRange.value + 'px'; }
 
   boldBtn.onclick = () => document.execCommand('bold');
   italicBtn.onclick = () => document.execCommand('italic');
+  underlineBtn.onclick = () => document.execCommand('underline');
+  strikeBtn.onclick = () => document.execCommand('strikeThrough');
+  highlightColor.oninput = () => document.execCommand('backColor', false, highlightColor.value);
+
+  leftAlign.onclick = () => document.execCommand('justifyLeft');
+  centerAlign.onclick = () => document.execCommand('justifyCenter');
+  rightAlign.onclick = () => document.execCommand('justifyRight');
+  justifyAlign.onclick = () => document.execCommand('justifyFull');
 
   applyBtn.onclick = async ()=>{
     const file = fontInput.files[0];
     if(file){ await loadFont(file); }
     preview.style.fontFamily = loadedFont ? 'UserFont' : 'inherit';
     preview.style.fontSize = sizeRange.value + 'px';
+    preview.style.lineHeight = lineRange.value;
+    preview.style.letterSpacing = letterRange.value + 'px';
+    preview.style.marginBottom = paraRange.value + 'px';
     preview.style.color = cp.value;
     preview.innerHTML = textInput.value.replace(/\n/g, '<br>') || '(Nothing yet)';
   }
@@ -197,11 +233,9 @@
     const canvas = await html2canvas(preview, {scale:2, backgroundColor: '#000'});
     const imgData = canvas.toDataURL('image/png');
     const pdf = new jspdf.jsPDF({unit:'px', format:'a4'});
-
     let pageWidth = pdf.internal.pageSize.getWidth();
     let ratio = canvas.width / canvas.height;
     let pdfHeight = pageWidth / ratio;
-
     pdf.addImage(imgData, 'PNG', 0, 0, pageWidth, pdfHeight);
     pdf.save('NeonText.pdf');
   }
