@@ -3,79 +3,123 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Font Generator — Size Control + PDF Export</title>
+  <title>NeonText Studio</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
     body {
       margin: 0;
       padding: 20px;
-      background: #000; /* Black background */
-      color: #fff;
+      background: #000;
       font-family: 'Poppins', sans-serif;
+      color: #fff;
+      overflow-x: hidden;
     }
+
     h1 {
-      font-size: 24px;
-      margin-bottom: 14px;
-      color: #ff69b4; /* Pink heading */
+      font-size: 28px;
+      color: #ff69b4;
+      text-align: center;
       text-shadow: 0 0 8px #ff69b4, 0 0 16px #ff69b4;
+      margin-bottom: 30px;
     }
+
     .box {
-      background: #111726;
-      padding: 16px;
-      border-radius: 12px;
-      margin-bottom: 20px;
-      box-shadow: 0 0 16px rgba(255,105,180,0.4);
+      background: linear-gradient(145deg,#111727,#0f101f);
+      padding: 20px;
+      border-radius: 16px;
+      margin-bottom: 25px;
+      box-shadow: 0 0 20px rgba(255,105,180,0.3), 0 0 40px rgba(148,0,255,0.2);
+      border: 1px solid rgba(255,105,180,0.2);
     }
+
     textarea {
       width: 100%;
       height: 200px;
       background: #0d1321;
       color: #fff;
       border: 1px solid #222;
-      padding: 10px;
-      border-radius: 8px;
-      box-shadow: 0 0 8px rgba(255,105,180,0.2) inset;
+      padding: 12px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(255,105,180,0.2) inset;
+      font-size: 16px;
+      resize: vertical;
     }
+
+    input[type="range"] {
+      width: 220px;
+      accent-color: #ff69b4;
+      margin: 10px 0;
+    }
+
     button {
-      background: #ff69b4;
+      background: linear-gradient(45deg,#ff69b4,#9400ff);
       color: #fff;
       border: none;
-      padding: 10px 16px;
-      border-radius: 12px;
+      padding: 10px 18px;
+      border-radius: 14px;
       font-weight: 600;
       cursor: pointer;
       margin-top: 10px;
-      margin-right: 6px;
-      box-shadow: 0 0 12px #ff69b4, 0 0 24px #ff69b4;
+      margin-right: 8px;
+      box-shadow: 0 0 16px #ff69b4, 0 0 32px #9400ff;
       transition: 0.2s all;
     }
+
     button:hover {
       transform: scale(1.05);
-      box-shadow: 0 0 20px #ff69b4, 0 0 40px #ff69b4;
+      box-shadow: 0 0 24px #ff69b4, 0 0 48px #9400ff;
     }
+
     #previewBox {
       margin-top: 20px;
-      padding: 20px;
+      padding: 24px;
       background: #0d1321;
-      border-radius: 16px;
+      border-radius: 18px;
       min-height: 200px;
       white-space: pre-wrap;
-      color: #ff69b4; /* default text color pink */
-      box-shadow: 0 0 12px #ff69b4, 0 0 24px #ff69b4 inset;
-      animation: neonGlow 2s infinite alternate;
+      color: #ff69b4;
+      font-size: 24px;
+      font-weight: 600;
+      text-align: center;
+      border: 2px solid #ff69b4;
+      box-shadow: 0 0 20px #ff69b4, 0 0 40px #9400ff inset;
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      animation: neonGradient 3s infinite alternate;
     }
-    @keyframes neonGlow {
-      0% { box-shadow: 0 0 12px #ff69b4, 0 0 24px #ff69b4 inset; }
-      100% { box-shadow: 0 0 20px #ff69b4, 0 0 40px #ff69b4 inset; }
+
+    @keyframes neonGradient {
+      0% { background: linear-gradient(90deg, #ff69b4, #9400ff, #00ffff); }
+      50% { background: linear-gradient(270deg, #ff69b4, #9400ff, #00ffff); }
+      100% { background: linear-gradient(90deg, #00ffff, #ff69b4, #9400ff); }
     }
+
     .controls {
       margin: 10px 0;
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
-    input[type="range"] { width: 200px; }
+
+    .controls input[type="color"] {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid #ff69b4;
+      cursor: pointer;
+      box-shadow: 0 0 12px #ff69b4;
+    }
+
+    label {
+      font-weight: 500;
+    }
   </style>
 </head>
 <body>
 
-<h1>Font Generator (Size Control + PDF Export)</h1>
+<h1>NeonText Studio</h1>
 
 <div class="box">
   <label>Select font (.ttf / .otf)</label><br><br>
@@ -95,7 +139,7 @@
 
 <div class="box">
   <label>Preview</label>
-  <div id="previewBox" style="font-size:24px">(Nothing yet)</div>
+  <div id="previewBox">(Nothing yet)</div>
 </div>
 
 <div class="controls">
@@ -122,7 +166,6 @@
     const buf = await file.arrayBuffer();
     const blob = new Blob([buf]);
     const url = URL.createObjectURL(blob);
-
     const face = new FontFace("UserFont", `url(${url})`);
     await face.load();
     document.fonts.add(face);
@@ -137,7 +180,6 @@
   applyBtn.onclick = async ()=>{
     const file = fontInput.files[0];
     if(file){ await loadFont(file); }
-
     const txt = textInput.value;
     preview.style.fontFamily = loadedFont ? 'UserFont' : 'inherit';
     preview.style.fontSize = sizeRange.value + 'px';
@@ -149,15 +191,12 @@
   exportPDF.onclick = async ()=>{
     const canvas = await html2canvas(preview, {scale:2, backgroundColor: null});
     const imgData = canvas.toDataURL('image/png');
-
     const pdf = new jspdf.jsPDF({unit:'px', format:'a4'});
-
     let pageWidth = pdf.internal.pageSize.getWidth();
     let ratio = canvas.width / canvas.height;
     let pdfHeight = pageWidth / ratio;
-
     pdf.addImage(imgData, 'PNG', 0, 0, pageWidth, pdfHeight);
-    pdf.save('text.pdf');
+    pdf.save('NeonText.pdf');
   }
 </script>
 
