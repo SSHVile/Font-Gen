@@ -13,7 +13,6 @@
       background: #000;
       font-family: 'Poppins', sans-serif;
       color: #fff;
-      overflow-x: hidden;
     }
 
     h1 {
@@ -78,12 +77,13 @@
       border-radius: 18px;
       min-height: 200px;
       white-space: pre-wrap;
-      color: #ff69b4; /* default pink color */
+      color: #fff; /* default white text */
       font-size: 24px;
       font-weight: 600;
-      text-align: center;
+      text-align: left; /* left aligned */
       border: 2px solid #ff69b4;
       box-shadow: 0 0 20px #ff69b4, 0 0 40px #9400ff inset;
+      overflow-wrap: break-word;
     }
 
     .controls {
@@ -118,7 +118,7 @@
 
 <div class="box">
   <label>Text</label><br><br>
-  <textarea id="textInput" placeholder="Type here..."></textarea>
+  <textarea id="textInput" placeholder="Type your paragraphs here..."></textarea>
   <br>
   <label>Font Size: <span id="sizeLabel">24px</span></label><br>
   <input id="sizeRange" type="range" min="10" max="120" value="24">
@@ -133,7 +133,7 @@
 </div>
 
 <div class="controls">
-  <label>Text Color: <input type="color" id="colorPicker" value="#ff69b4"></label>
+  <label>Text Color: <input type="color" id="colorPicker" value="#ffffff"></label>
 </div>
 
 <!-- html2canvas + jsPDF -->
@@ -173,18 +173,21 @@
     const txt = textInput.value;
     preview.style.fontFamily = loadedFont ? 'UserFont' : 'inherit';
     preview.style.fontSize = sizeRange.value + 'px';
+    preview.style.color = cp.value; // ensure chosen color applies
     preview.textContent = txt || '(Nothing yet)';
   }
 
   cp.addEventListener('input', e => { preview.style.color = e.target.value; });
 
   exportPDF.onclick = async ()=>{
-    const canvas = await html2canvas(preview, {scale:2, backgroundColor: null});
+    const canvas = await html2canvas(preview, {scale:2, backgroundColor: '#000'}); // black background
     const imgData = canvas.toDataURL('image/png');
     const pdf = new jspdf.jsPDF({unit:'px', format:'a4'});
+
     let pageWidth = pdf.internal.pageSize.getWidth();
     let ratio = canvas.width / canvas.height;
     let pdfHeight = pageWidth / ratio;
+
     pdf.addImage(imgData, 'PNG', 0, 0, pageWidth, pdfHeight);
     pdf.save('NeonText.pdf');
   }
