@@ -107,6 +107,10 @@
     label {
       font-weight: 500;
     }
+
+    .format-btns button {
+      margin-right: 5px;
+    }
   </style>
 </head>
 <body>
@@ -125,13 +129,17 @@
   <label>Font Size: <span id="sizeLabel">24px</span></label><br>
   <input id="sizeRange" type="range" min="10" max="120" value="24">
   <br>
+  <div class="format-btns">
+    <button id="boldBtn"><b>B</b></button>
+    <button id="italicBtn"><i>I</i></button>
+  </div>
   <button id="applyBtn">Apply</button>
   <button id="exportPDF">Export PDF</button>
 </div>
 
 <div class="box">
   <label>Preview</label>
-  <div id="previewBox">(Nothing yet)</div>
+  <div id="previewBox" contenteditable="true">(Nothing yet)</div>
 </div>
 
 <div class="controls">
@@ -151,6 +159,8 @@
   const sizeLabel = document.getElementById('sizeLabel');
   const exportPDF = document.getElementById('exportPDF');
   const cp = document.getElementById('colorPicker');
+  const boldBtn = document.getElementById('boldBtn');
+  const italicBtn = document.getElementById('italicBtn');
 
   let loadedFont = null;
 
@@ -169,20 +179,22 @@
     preview.style.fontSize = sizeRange.value + 'px';
   }
 
+  boldBtn.onclick = () => document.execCommand('bold');
+  italicBtn.onclick = () => document.execCommand('italic');
+
   applyBtn.onclick = async ()=>{
     const file = fontInput.files[0];
     if(file){ await loadFont(file); }
-    const txt = textInput.value;
     preview.style.fontFamily = loadedFont ? 'UserFont' : 'inherit';
     preview.style.fontSize = sizeRange.value + 'px';
-    preview.style.color = cp.value; // ensure chosen color applies
-    preview.textContent = txt || '(Nothing yet)';
+    preview.style.color = cp.value;
+    preview.innerHTML = textInput.value.replace(/\n/g, '<br>') || '(Nothing yet)';
   }
 
   cp.addEventListener('input', e => { preview.style.color = e.target.value; });
 
   exportPDF.onclick = async ()=>{
-    const canvas = await html2canvas(preview, {scale:2, backgroundColor: '#000'}); // black background
+    const canvas = await html2canvas(preview, {scale:2, backgroundColor: '#000'});
     const imgData = canvas.toDataURL('image/png');
     const pdf = new jspdf.jsPDF({unit:'px', format:'a4'});
 
