@@ -42,39 +42,69 @@ textarea {
   border: 1px solid #222;
   padding: 12px;
   border-radius: 12px;
-  box-shadow: 0 0 10px rgba(255,105,180,0.2) inset;
+  box-shadow: 0 0 15px #ff69b4 inset, 0 0 10px #9400ff inset;
   font-size: 16px;
   resize: vertical;
 }
 
+/* Slider styling */
 input[type="range"] {
+  -webkit-appearance: none;
   width: 150px;
-  accent-color: #ff69b4;
+  height: 8px;
+  border-radius: 5px;
+  background: linear-gradient(90deg, #ff69b4, #9400ff);
+  box-shadow: 0 0 8px #ff69b4, 0 0 12px #9400ff;
+  outline: none;
   margin: 0 10px 0 5px;
 }
-
-button, select {
-  font-weight: 600;
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 8px #ff69b4, 0 0 12px #9400ff;
   cursor: pointer;
-  transition: 0.2s all;
+}
+input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 8px #ff69b4, 0 0 12px #9400ff;
+  cursor: pointer;
 }
 
-button {
+/* Buttons and dropdown neon */
+button, #formatDropdown, #applyFormatBtn {
   background: linear-gradient(45deg,#ff69b4,#9400ff);
   color: #fff;
-  border: none;
-  padding: 8px 14px;
   border-radius: 14px;
-  margin-top: 10px;
-  margin-right: 8px;
+  padding: 8px 14px;
+  border: none;
   box-shadow: 0 0 16px #ff69b4, 0 0 32px #9400ff;
+  transition: 0.2s all;
 }
-
-button:hover, select:hover {
+button:hover, #formatDropdown:hover, #applyFormatBtn:hover {
   transform: scale(1.05);
   box-shadow: 0 0 24px #ff69b4, 0 0 48px #9400ff;
 }
 
+/* Apply button always glows */
+#applyFormatBtn {
+  display: none;
+  margin-left: 5px;
+  animation: neonGlow 1.5s infinite alternate;
+}
+
+/* Neon glow animation */
+@keyframes neonGlow {
+  from { box-shadow: 0 0 16px #ff69b4, 0 0 32px #9400ff; }
+  to { box-shadow: 0 0 24px #ff69b4, 0 0 48px #9400ff; }
+}
+
+/* Preview box neon */
 #previewBox {
   margin-top: 20px;
   padding: 24px;
@@ -91,42 +121,27 @@ button:hover, select:hover {
   overflow-wrap: break-word;
 }
 
-.controls {
-  margin: 10px 0;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.controls input[type="color"], .controls input[type="range"] {
-  cursor: pointer;
-  box-shadow: 0 0 12px #ff69b4;
-}
-
-label {
-  font-weight: 500;
-}
-
-#formatDropdown, #applyFormatBtn {
-  background: linear-gradient(45deg,#ff69b4,#9400ff);
-  color: #fff;
-  border-radius: 12px;
-  padding: 8px 12px;
-  border: none;
-  box-shadow: 0 0 16px #ff69b4, 0 0 32px #9400ff;
-}
-
-#applyFormatBtn {
-  display: none;
-  margin-left: 5px;
-}
-
-.slider-row {
+/* Controls row styling */
+.controls, .slider-row {
   display: flex;
   align-items: center;
   gap: 10px;
   flex-wrap: wrap;
+}
+
+/* Color picker neon */
+input[type="color"] {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid #ff69b4;
+  box-shadow: 0 0 12px #ff69b4;
+  cursor: pointer;
+}
+
+/* Labels */
+label {
+  font-weight: 500;
 }
 </style>
 </head>
