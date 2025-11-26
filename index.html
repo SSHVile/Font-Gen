@@ -54,20 +54,23 @@ input[type="range"] {
 }
 
 button, select {
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s all;
+}
+
+button {
   background: linear-gradient(45deg,#ff69b4,#9400ff);
   color: #fff;
   border: none;
   padding: 10px 14px;
   border-radius: 14px;
-  font-weight: 600;
-  cursor: pointer;
   margin-top: 10px;
   margin-right: 8px;
   box-shadow: 0 0 16px #ff69b4, 0 0 32px #9400ff;
-  transition: 0.2s all;
 }
 
-button:hover, select:hover {
+button:hover {
   transform: scale(1.05);
   box-shadow: 0 0 24px #ff69b4, 0 0 48px #9400ff;
 }
@@ -103,6 +106,25 @@ button:hover, select:hover {
 
 label {
   font-weight: 500;
+}
+
+#formatDropdown {
+  background: linear-gradient(45deg, #fff, #ff69b4);
+  color: black;
+  border-radius: 12px;
+  padding: 8px 12px;
+  border: none;
+  box-shadow: 0 0 16px #ff69b4, 0 0 32px #9400ff;
+}
+#applyFormatBtn {
+  display: none;
+  background: linear-gradient(45deg,#ff69b4,#9400ff);
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 12px;
+  margin-left: 5px;
+  box-shadow: 0 0 16px #ff69b4, 0 0 32px #9400ff;
 }
 </style>
 </head>
@@ -145,8 +167,9 @@ label {
     <option value="justify">Justify</option>
   </select>
   <input type="color" id="highlightColor" value="#000000" style="margin-left:5px;">
+  <button id="applyFormatBtn">Apply</button>
   <br>
-  <button id="applyBtn">Apply</button>
+  <button id="applyBtn">Apply All Text</button>
   <button id="exportPDF">Export PDF</button>
 </div>
 
@@ -179,9 +202,12 @@ const exportPDF = document.getElementById('exportPDF');
 const cp = document.getElementById('colorPicker');
 const formatDropdown = document.getElementById('formatDropdown');
 const highlightColor = document.getElementById('highlightColor');
+const applyFormatBtn = document.getElementById('applyFormatBtn');
 
 let loadedFont = null;
+let selectedFormat = null;
 
+// Load font
 async function loadFont(file){
   const buf = await file.arrayBuffer();
   const blob = new Blob([buf]);
@@ -192,35 +218,48 @@ async function loadFont(file){
   loadedFont = "UserFont";
 }
 
-// Update style sliders
+// Sliders
 sizeRange.oninput = ()=>{ sizeLabel.textContent = sizeRange.value + 'px'; preview.style.fontSize = sizeRange.value + 'px'; }
 lineRange.oninput = ()=>{ lineLabel.textContent = lineRange.value; preview.style.lineHeight = lineRange.value; }
 letterRange.oninput = ()=>{ letterLabel.textContent = letterRange.value + 'px'; preview.style.letterSpacing = letterRange.value + 'px'; }
 paraRange.oninput = ()=>{ paraLabel.textContent = paraRange.value + 'px'; preview.style.marginBottom = paraRange.value + 'px'; }
 
+// Show Apply button on dropdown selection
 formatDropdown.onchange = ()=>{
+  if(formatDropdown.value){
+    selectedFormat = formatDropdown.value;
+    applyFormatBtn.style.display = "inline-block";
+  } else {
+    applyFormatBtn.style.display = "none";
+  }
+}
+
+// Apply formatting
+applyFormatBtn.onclick = ()=>{
+  if(!selectedFormat) return;
   const selection = window.getSelection();
   if(!selection.rangeCount) return;
   const range = selection.getRangeAt(0);
-  let span = document.createElement('span');
+  const span = document.createElement('span');
   span.appendChild(range.extractContents());
-  const val = formatDropdown.value;
-  switch(val){
-    case "bold": span.style.fontWeight = "bold"; break;
-    case "italic": span.style.fontStyle = "italic"; break;
-    case "underline": span.style.textDecoration = "underline"; break;
-    case "strike": span.style.textDecoration = "line-through"; break;
+  switch(selectedFormat){
+    case "bold": span.style.fontWeight="bold"; break;
+    case "italic": span.style.fontStyle="italic"; break;
+    case "underline": span.style.textDecoration="underline"; break;
+    case "strike": span.style.textDecoration="line-through"; break;
     case "highlight": span.style.backgroundColor = highlightColor.value; break;
-    case "left": preview.style.textAlign = "left"; return;
-    case "center": preview.style.textAlign = "center"; return;
-    case "right": preview.style.textAlign = "right"; return;
-    case "justify": preview.style.textAlign = "justify"; return;
-    default: return;
+    case "left": preview.style.textAlign="left"; applyFormatBtn.style.display="none"; return;
+    case "center": preview.style.textAlign="center"; applyFormatBtn.style.display="none"; return;
+    case "right": preview.style.textAlign="right"; applyFormatBtn.style.display="none"; return;
+    case "justify": preview.style.textAlign="justify"; applyFormatBtn.style.display="none"; return;
   }
   range.insertNode(span);
-  formatDropdown.value = "";
+  applyFormatBtn.style.display="none";
+  formatDropdown.value="";
+  selectedFormat=null;
 }
 
+// Apply all text
 applyBtn.onclick = async ()=>{
   const file = fontInput.files[0];
   if(file){ await loadFont(file); }
@@ -233,8 +272,10 @@ applyBtn.onclick = async ()=>{
   preview.innerHTML = textInput.value.replace(/\n/g, '<br>') || '(Nothing yet)';
 }
 
+// Color picker
 cp.addEventListener('input', e => { preview.style.color = e.target.value; });
 
+// Export PDF
 exportPDF.onclick = async ()=>{
   const canvas = await html2canvas(preview, {scale:2, backgroundColor: '#000'});
   const imgData = canvas.toDataURL('image/png');
